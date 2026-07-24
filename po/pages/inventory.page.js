@@ -1,10 +1,6 @@
 class InventoryPage {
     get sortDropdown() { return $('//select[@class="product_sort_container"]');}
     get itemPrices() { return $$('//div[@class="inventory_item_price"]');}
-    get addToCartBackpackBtn() { return $('//button[@id="add-to-cart-sauce-labs-backpack"]');}
-    get addToCartLightBtn() { return $('//button[@id="add-to-cart-sauce-labs-bike-light"]');}
-    get removeBackpackBtn() { return $('//button[@id="remove-sauce-labs-backpack"]');}
-    get removeLightBtn() { return $('//button[@id="remove-sauce-labs-bike-light"]');}
     get cartBadge() { return $('//span[@data-test="shopping-cart-badge"]');}
 
     async verifyPageUrl() {
@@ -27,32 +23,28 @@ class InventoryPage {
         return prices;
     }
 
-    async addBackpackToCart(){
-        await this.addToCartBackpackBtn.waitForDisplayed();
-        await this.addToCartBackpackBtn.click();
+    getItemBtn(itemName) { return $(`//div[@data-test="inventory-item" and .//div[@data-test="inventory-item-name" and text()='${itemName}']]//button`);}
+
+    async addItemToCart(itemName){
+        const button = await this.getItemBtn(itemName);
+        await button.click();
     }
 
-    async addLightToCart(){
-        await this.addToCartLightBtn.waitForDisplayed();
-        await this.addToCartLightBtn.click();
+    async removeItemFromCart(itemName) {
+        const button = await this.getItemBtn(itemName);
+        await button.click();
     }
 
-    async getRemoveBtnTexts(){
-        await this.removeBackpackBtn.waitForDisplayed();
-        await this.removeLightBtn.waitForDisplayed();
-        const backpackText = await this.removeBackpackBtn.getText();
-        const lightText = await this.removeLightBtn.getText();
-        return {backpackText,lightText};
+    async getBtnText(itemName){
+        const button = await this.getItemBtn(itemName);
+        return await button.getText();
     }
 
-    async getCartBadgeText(){
-        await this.cartBadge.waitForDisplayed();
-        return await this.cartBadge.getText();
-    }
-
-    async removeBackpackFromCart(){
-        await this.removeBackpackBtn.waitForDisplayed();
-        await this.removeBackpackBtn.click();
+    async getCartText() {
+        if (await this.cartBadge.isExisting()){
+            return await this.cartBadge.getText();
+        }
+        return '0'
     }
 }
 

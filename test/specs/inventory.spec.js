@@ -1,5 +1,5 @@
-import loginPage from '../../po/pages/login.page';
-import inventoryPage from '../../po/pages/inventory.page';
+import loginPage from '../pageobjects/login.page';
+import inventoryPage from '../pageobjects/inventory.page';
 
 describe('Sorting Validation', () => {
     beforeEach(async()=> {

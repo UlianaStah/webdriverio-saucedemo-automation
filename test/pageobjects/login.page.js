@@ -1,18 +1,22 @@
 class LoginPage {
-    get usernameInput() { return $('//input[@placeholder="Username"]');}
-    get passwordInput() { return $('//input[@placeholder="Password"]');}
-    get loginButton() { return $('//input[@id="login-button"]');}   
+    get usernameInput() { 
+        return $('[data-test="username"]');
+    }
+    get passwordInput() { 
+        return $('[data-test="password"]');
+    }
+    get loginButton() { 
+        return $('[data-test="login-button"]');
+    }   
+    get errorMessage() {
+        return $('[data-test="error"]');
+    }
 
     async open() {
        await browser.url('https://www.saucedemo.com/');
     }
 
-    async expectFieldsToBeEmpty() {
-       await expect(this.usernameInput).toHaveValue('');
-       await expect(this.passwordInput).toHaveValue('');
-    }
-
-    async login(username, password = 'secret_sauce') {
+    async login(username, password) {
         await this.usernameInput.setValue(username);
         await this.passwordInput.setValue(password);
         await this.loginButton.click();

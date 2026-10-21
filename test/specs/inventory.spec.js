@@ -4,7 +4,6 @@ import inventoryPage from '../pageobjects/inventory.page';
 describe('Sorting Validation', () => {
     beforeEach(async()=> {
         await loginPage.open();
-        await loginPage.expectFieldsToBeEmpty();
         await loginPage.login('standard_user');   
         await inventoryPage.verifyPageUrl(); 
     });

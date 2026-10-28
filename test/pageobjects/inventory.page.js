@@ -11,6 +11,9 @@ class InventoryPage {
     get cartBadge() { 
         return $('[data-test="shopping-cart-badge"]');
     }
+    get shoppingCartLink() {
+    return $('[data-test="shopping-cart-link"]');
+    }
 
     async verifyPageUrl() {
         await expect(browser).toHaveUrl (
@@ -50,7 +53,7 @@ class InventoryPage {
     }
 
     getItemBtn(itemName) { 
-        return $(``//div[@data-test="inventory-item" and .//div[@data-test="inventory-item-name" and text()="${itemName}"]]//button`
+        return $(`//div[@data-test="inventory-item" and .//div[@data-test="inventory-item-name" and text()="${itemName}"]]//button`
         );
     }
 
@@ -71,6 +74,10 @@ class InventoryPage {
             return await this.cartBadge.getText();
         }
         return '0'
+    }
+
+    async openCart() {
+    await this.shoppingCartLink.click();
     }
 }
 

@@ -1,43 +1,69 @@
 class InventoryPage {
-    get sortDropdown() { return $('//select[@class="product_sort_container"]');}
-    get itemPrices() { return $$('//div[@class="inventory_item_price"]');}
-    get cartBadge() { return $('//span[@data-test="shopping-cart-badge"]');}
-
-    async verifyPageUrl() {
-        await expect(browser).toHaveUrl ('https://www.saucedemo.com/inventory.html'); 
+    get sortDropdown() { 
+        return $('[data-test="product-sort-container"]');
+    }
+    get itemPrices() { 
+        return $$('[data-test="inventory-item-price"]');
+    }
+    get itemNames() {
+    return $$('[data-test="inventory-item-name"]');
+    }
+    get cartBadge() { 
+        return $('[data-test="shopping-cart-badge"]');
     }
 
-    async sortByLowerToHigh() {
+    async verifyPageUrl() {
+        await expect(browser).toHaveUrl (
+            `${browser.options.baseUrl}/inventory.html`
+        ); 
+    }
+
+    async sortByNameAtoZ() {
+    await this.sortDropdown.waitForDisplayed();
+    await this.sortDropdown.selectByVisibleText('Name (A to Z)');
+    }
+
+    async sortByPriceLowToHigh() {
         await this.sortDropdown.waitForDisplayed();
         await this.sortDropdown.selectByVisibleText("Price (low to high)");
     }
 
-    async getPrices(){
-        const priceElements = await this.itemPrices;
+    async getProductNames() {
+    const elements = await this.itemNames;
+    const names = [];
+    
+    for (const element of elements) {
+    names.push(await element.getText());
+    }
+    return names;
+    }
+
+    async getProductPrices() {
+        const elements = await this.itemPrices;
         const prices = [];
-        for (const element of priceElements) {
+
+        for (const element of elements) {
             const priceText = await element.getText();
-            const price = parseFloat(priceText.replace('$', ''));
-            prices.push(price);
+            prices.push(parseFloat(priceText.replace('$', '')));
         }
         return prices;
     }
 
-    getItemBtn(itemName) { return $(`//div[@data-test="inventory-item" and .//div[@data-test="inventory-item-name" and text()='${itemName}']]//button`);}
+    getItemBtn(itemName) { 
+        return $(``//div[@data-test="inventory-item" and .//div[@data-test="inventory-item-name" and text()="${itemName}"]]//button`
+        );
+    }
 
-    async addItemToCart(itemName){
-        const button = await this.getItemBtn(itemName);
-        await button.click();
+    async addItemToCart(itemName) {
+        await this.getItemBtn(itemName).click();
     }
 
     async removeItemFromCart(itemName) {
-        const button = await this.getItemBtn(itemName);
-        await button.click();
+        await this.getItemBtn(itemName).click();
     }
 
     async getBtnText(itemName){
-        const button = await this.getItemBtn(itemName);
-        return await button.getText();
+        return await this.getItemBtn(itemName).getText();
     }
 
     async getCartText() {

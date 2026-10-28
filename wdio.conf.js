@@ -19,7 +19,7 @@ export const config = {
      
     logLevel: 'error',   
     bail: 0,    
-    baseUrl: 'http://www.saucedemo.com',    
+    baseUrl: 'https://www.saucedemo.com',    
     waitforTimeout: 10000,    
     connectionRetryTimeout: 120000,    
     connectionRetryCount: 3,

@@ -15,10 +15,6 @@ class CheckoutPage {
         return $('[data-test="continue"]');
     }
 
-    get cancelButton() {
-        return $('[data-test="cancel"]');
-    }
-
     get errorMessage() {
         return $('[data-test="error"]');
     }
@@ -29,6 +25,10 @@ class CheckoutPage {
 
     get overviewItems() {
         return $$('[data-test="inventory-item"]');
+    }
+
+    get overviewItemsNames() {
+        return $('[data-test="inventory-item-name"]');
     }
 
     get paymentInformation() {
@@ -48,10 +48,6 @@ class CheckoutPage {
     }
 
 
-    get backHomeButton() {
-        return $('[data-test="back-to-products"]');
-    }
-
     async fillCustomerInformation(firstName, lastName, postalCode) {
         await this.firstNameInput.setValue(firstName);
         await this.lastNameInput.setValue(lastName);
@@ -64,10 +60,6 @@ class CheckoutPage {
 
     async finishCheckout() {
         await this.finishButton.click();
-    }
-
-    async backHome() {
-        await this.backHomeButton.click();
     }
 
     async getOverviewItemCount() {

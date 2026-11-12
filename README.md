@@ -1,8 +1,9 @@
-## Swag Labs (SauceDemo) E2E Test Automation Suite
+# Swag Labs (SauceDemo) E2E Test Automation Suite
 
-![WebdriverIO](https://img.shields.io/badge/WebdriverIO-v8-orange?logo=webdriverio)
+![WebdriverIO](https://img.shields.io/badge/WebdriverIO-v9-orange?logo=webdriverio)
 ![Node.js](https://img.shields.io/badge/Node.js-v18%2B-green?logo=nodedotjs)
 ![JavaScript](https://img.shields.io/badge/Language-JavaScript-yellow?logo=javascript)
+![E2E tests](https://github.com/UlianaStah/webdriverio-saucedemo-automation/actions/workflows/e2e.yml/badge.svg)
 
 An end-to-end (E2E) UI test automation project for the Swag Labs [SauceDemo](https://www.saucedemo.com/) e-commerce application, built using **WebdriverIO** and **JavaScript**. The project follows the **Page Object Model (POM)** design pattern for scalability and maintainability.
 
@@ -13,9 +14,10 @@ An end-to-end (E2E) UI test automation project for the Swag Labs [SauceDemo](htt
 - **Authentication & Authorization:**
   - Successful login with valid credentials.
   - Negative testing: invalid credentials, locked-out user handling, empty required fields.
+  - Access control: the inventory page cannot be opened without logging in.
 
 - **Inventory & Shopping Cart:**
-  - Product sorting by name (A-Z) and price (Low to High).
+  - Product sorting by name (Z-A) and price (Low to High).
   - Adding items to the shopping cart.
   - Removing items from the shopping cart.
   - Verification of cart badge updates.
@@ -33,7 +35,7 @@ An end-to-end (E2E) UI test automation project for the Swag Labs [SauceDemo](htt
 - **Automation Framework:** WebdriverIO
 - **Test Framework:** Mocha 
 - **Design Pattern:** Page Object Model (POM)
-- **Locator Strategy:** Data-test attributes, CSS selectors
+- **Locator Strategy:** Data-test attributes (CSS selectors); XPath for finding an item button by product name
 - **Runtime:** Node.js
 - **Package Manager:** npm
 - **Version Control:** Git and GitHub
@@ -45,6 +47,8 @@ An end-to-end (E2E) UI test automation project for the Swag Labs [SauceDemo](htt
 ```text
 .
 ├── test/
+│   ├── data/
+│   │   └── users.js
 │   ├── pageobjects/
 │   │   ├── login.page.js
 │   │   ├── inventory.page.js
@@ -59,6 +63,9 @@ An end-to-end (E2E) UI test automation project for the Swag Labs [SauceDemo](htt
 ├── package.json
 ├── package-lock.json
 └── README.md
+```
+
+
 ---
 
 ## ⚙️ Prerequisites
@@ -72,13 +79,18 @@ An end-to-end (E2E) UI test automation project for the Swag Labs [SauceDemo](htt
 
 1. **Clone the repository:**
 
+```bash
 git clone https://github.com/UlianaStah/webdriverio-saucedemo-automation.git
 cd webdriverio-saucedemo-automation
+```
 
 2. **Install dependencies:**
 
+```bash
 npm install
+```
 
 3. **Run tests:**
-
+```bash
 npm test
+```

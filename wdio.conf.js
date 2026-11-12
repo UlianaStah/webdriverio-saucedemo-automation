@@ -1,21 +1,20 @@
 export const config = {
- 
     runner: 'local',
-       
-    specs: [
-       './test/specs/**/*.js'
-    ],
-    
+    specs: ['./test/specs/**/*.js'],
     exclude: [],
-    
     maxInstances: 10,
     
     capabilities: [{
-        browserName: 'chrome',
-        'goog:chromeOptions': {
-            args: process.env.CI ? ['--headless', '--disable-gpu', '--no-sandbox'] : []
-        }
-    }], 
+    browserName: 'chrome',
+    'wdio:chromedriverOptions': {
+        binary: './node_modules/chromedriver/lib/chromedriver/chromedriver.exe'
+    },
+    'goog:chromeOptions': {
+        args: process.env.CI
+            ? ['--headless', '--disable-gpu', '--no-sandbox', '--window-size=1920,1080']
+            : []
+    }
+}],
      
     logLevel: 'error',   
     bail: 0,    
@@ -26,9 +25,14 @@ export const config = {
  
     framework: 'mocha',    
     reporters: ['spec'],
-    
     mochaOpts: {
         ui: 'bdd',
         timeout: 60000
+    },
+
+    afterTest: async function (test, context, { passed }) {
+        if (!passed) {
+            await browser.saveScreenshot(`./screenshots/${test.title.replace(/\s+/g, '_')}.png`);
+        }
     },
 };

@@ -3,12 +3,8 @@ class CartPage {
         return $$('[data-test="inventory-item"]');
     }
 
-    get cartItemNames() {
+    get itemNames() {
         return $$('[data-test="inventory-item-name"]');
-    }
-
-    get continueShoppingButton() {
-        return $('[data-test="continue-shopping"]');
     }
 
     get checkoutButton() {
@@ -22,7 +18,7 @@ class CartPage {
     }
     
     async getItemNames() {
-        const elements = await this.cartItemNames;
+        const elements = await this.itemNames;
         const names = [];
 
         for (const element of elements) {
@@ -31,19 +27,11 @@ class CartPage {
         return names;
     }
 
-    async isItemInCart(itemName) {
-        return (await this.getItemNames()).includes(itemName);
-    }
-
     async removeItemInCart(itemName) {
         const cartItem = await this.getCartItem(itemName);
         const removeButton = await cartItem.$('button');
 
         await removeButton.click();
-    }
-
-    async continueShopping() {
-        await this.continueShoppingButton.click();
     }
 
     async proceedToCheckout() {

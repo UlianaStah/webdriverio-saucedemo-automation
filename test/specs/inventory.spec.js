@@ -1,19 +1,20 @@
-import loginPage from '../pageobjects/login.page';
-import inventoryPage from '../pageobjects/inventory.page';
+import loginPage from "../pageobjects/login.page";
+import inventoryPage from "../pageobjects/inventory.page";
+import {users} from "../data/users";
 
 describe('Inventory Sorting', () => {
     beforeEach(async()=> {
         await loginPage.open();
-        await loginPage.login('standard_user', 'secret_sauce');   
-        await inventoryPage.verifyPageUrl(); 
+        await loginPage.login(users.standard.username, users.standard.password);   
+        await expect(browser).toHaveUrl(expect.stringContaining('/inventory.html'));
     });
 
-it ('should sort products by name from A to Z', async () => {
-        await inventoryPage.sortByNameAtoZ();
+it ('should sort products by name from Z to A', async () => {
+        await inventoryPage.sortByNameZtoA();
 
-        const names = await inventoryPage.getProductNames();
+        const names = await inventoryPage.getItemNames();
         const expectedNames = [...names].sort((a,b) => 
-            a.localeCompare(b)
+            b.localeCompare(a)
     );
         await expect(names).toEqual (expectedNames);
     });

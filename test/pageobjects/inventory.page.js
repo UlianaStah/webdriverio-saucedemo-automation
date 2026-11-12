@@ -6,39 +6,33 @@ class InventoryPage {
         return $$('[data-test="inventory-item-price"]');
     }
     get itemNames() {
-    return $$('[data-test="inventory-item-name"]');
+        return $$('[data-test="inventory-item-name"]');
     }
     get cartBadge() { 
         return $('[data-test="shopping-cart-badge"]');
     }
     get shoppingCartLink() {
-    return $('[data-test="shopping-cart-link"]');
+        return $('[data-test="shopping-cart-link"]');
     }
 
-    async verifyPageUrl() {
-        await expect(browser).toHaveUrl (
-            `${browser.options.baseUrl}/inventory.html`
-        ); 
-    }
-
-    async sortByNameAtoZ() {
-    await this.sortDropdown.waitForDisplayed();
-    await this.sortDropdown.selectByVisibleText('Name (A to Z)');
+    async sortByNameZtoA() {
+        await this.sortDropdown.waitForDisplayed();
+        await this.sortDropdown.selectByVisibleText('Name (Z to A)');
     }
 
     async sortByPriceLowToHigh() {
         await this.sortDropdown.waitForDisplayed();
-        await this.sortDropdown.selectByVisibleText("Price (low to high)");
+        await this.sortDropdown.selectByVisibleText('Price (low to high)');
     }
 
-    async getProductNames() {
-    const elements = await this.itemNames;
-    const names = [];
+    async getItemNames() {
+        const elements = await this.itemNames;
+        const names = [];
     
-    for (const element of elements) {
-    names.push(await element.getText());
-    }
-    return names;
+        for (const element of elements) {
+            names.push(await element.getText());
+        }
+        return names;
     }
 
     async getProductPrices() {
@@ -61,23 +55,12 @@ class InventoryPage {
         await this.getItemBtn(itemName).click();
     }
 
-    async removeItemFromCart(itemName) {
-        await this.getItemBtn(itemName).click();
-    }
-
     async getBtnText(itemName){
         return await this.getItemBtn(itemName).getText();
     }
 
-    async getCartText() {
-        if (await this.cartBadge.isExisting()){
-            return await this.cartBadge.getText();
-        }
-        return '0'
-    }
-
     async openCart() {
-    await this.shoppingCartLink.click();
+        await this.shoppingCartLink.click();
     }
 }
 

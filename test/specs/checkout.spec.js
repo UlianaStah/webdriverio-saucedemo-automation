@@ -2,6 +2,7 @@ import loginPage from "../pageobjects/login.page";
 import inventoryPage from "../pageobjects/inventory.page";
 import cartPage from "../pageobjects/cart.page";
 import checkoutPage from "../pageobjects/checkout.page";
+import {users} from "../data/users";
 
 describe('Checkout functionality', () => {
     const customer = {
@@ -14,8 +15,10 @@ describe('Checkout functionality', () => {
 
     beforeEach(async () => {
         await loginPage.open();
-        await loginPage.login('standard_user', 'secret_sauce');
-        await inventoryPage.verifyPageUrl();
+        await browser.execute(() => window.localStorage.clear());
+        await browser.deleteCookies();
+        await loginPage.login(users.standard.username, users.standard.password);
+        await expect(browser).toHaveUrl(expect.stringContaining('/inventory.html'));
 
         await inventoryPage.addItemToCart(product);
         await inventoryPage.openCart();
@@ -32,7 +35,9 @@ describe('Checkout functionality', () => {
 
         await checkoutPage.continueToOverview();
 
-        await expect(await checkoutPage.getOverviewItemCount()).toEqual(1);
+        await expect(checkoutPage.overviewItems).toBeElementsArrayOfSize(1);
+
+        await expect(checkoutPage.overviewItemsNames).toHaveText(product);
 
         await expect(checkoutPage.paymentInformation).toHaveText(
             expect.stringContaining('SauceCard')

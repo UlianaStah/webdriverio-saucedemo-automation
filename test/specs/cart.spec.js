@@ -1,46 +1,50 @@
-import loginPage from '../pageobjects/login.page';
-import inventoryPage from '../pageobjects/inventory.page';
-import cartPage from '../pageobjects/cart.page';
+import loginPage from "../pageobjects/login.page";
+import inventoryPage from "../pageobjects/inventory.page";
+import cartPage from "../pageobjects/cart.page";
+import {users} from "../data/users";
 
 describe('Cart functionality', () => {
-    const testData = [
-        {
-        item1: 'Sauce Labs Backpack',
-        item2: 'Sauce Labs Bike Light',
-        itemToRemove: 'Sauce Labs Backpack'
-        }
-    ];
-
+    const item1 = 'Sauce Labs Backpack';
+    const item2 = 'Sauce Labs Bike Light';
+        
     beforeEach(async()=> {
         await loginPage.open();
-        await loginPage.login('standard_user','secret_sauce');   
-        await inventoryPage.verifyPageUrl(); 
+        await browser.execute(() => window.localStorage.clear());
+        await browser.deleteCookies();
+        await loginPage.login(users.standard.username, users.standard.password);   
+        await expect(browser).toHaveUrl(expect.stringContaining('/inventory.html')); 
     });
 
-    testData.forEach(({item1, item2, itemToRemove}) => {
-        it ('should add products, display them in the cart and remove a product', async () => {
-            await inventoryPage.addItemToCart(item1);
-            await inventoryPage.addItemToCart(item2);
+    it ('should show "Remove" buttons and update the badge after adding products', async () => {
+        await inventoryPage.addItemToCart(item1);
+        await inventoryPage.addItemToCart(item2);
 
-            const btnText1 = await inventoryPage.getBtnText(item1);
-            const btnText2 = await inventoryPage.getBtnText(item2);
-            await expect(btnText1).toEqual('Remove');
-            await expect(btnText2).toEqual('Remove');
-            await expect(inventoryPage.cartBadge).toHaveText('2');
-
-            await inventoryPage.openCart();
-
-            await expect(cartPage.cartItems).toBeElementsArrayOfSize(2);
-            const cartNames = await cartPage.getItemNames();
-            await expect(cartNames).toEqual(
-                expect.arrayContaining([item1,item2])
-            );
-
-            await cartPage.removeItemInCart(itemToRemove);
-
-            const remainingNames = await cartPage.getItemNames();
-            await expect(remainingNames).toEqual([item2]);
-            await expect(cartPage.cartItems).toBeElementsArrayOfSize(1);
-        });
+        await expect(inventoryPage.getItemBtn(item1)).toHaveText('Remove');
+        await expect(inventoryPage.getItemBtn(item2)).toHaveText('Remove');
+        await expect(inventoryPage.cartBadge).toHaveText('2');
     });
-});
+    
+    it('should display the added products in the cart', async () => {
+        await inventoryPage.addItemToCart(item1);
+        await inventoryPage.addItemToCart(item2);
+        await inventoryPage.openCart();
+
+        await expect(cartPage.cartItems).toBeElementsArrayOfSize(2);
+        const cartNames = await cartPage.getItemNames();
+        expect(cartNames).toEqual([item1, item2]);
+    });
+
+    it('should remove product from the cart', async () => {
+        await inventoryPage.addItemToCart(item1);
+        await inventoryPage.addItemToCart(item2);
+        await inventoryPage.openCart();
+
+        await cartPage.removeItemInCart(item1);
+
+        await expect(cartPage.cartItems).toBeElementsArrayOfSize(1);
+        const remainingNames = await cartPage.getItemNames();
+        expect(remainingNames).toEqual([item2]);
+        await expect(inventoryPage.cartBadge).toHaveText('1');
+    });
+});    
+        

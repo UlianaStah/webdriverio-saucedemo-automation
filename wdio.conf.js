@@ -2,7 +2,7 @@ export const config = {
     runner: 'local',
     specs: ['./test/specs/**/*.js'],
     exclude: [],
-    maxInstances: 10,
+    maxInstances: process.env.CI ? 1 : 10,
     
     capabilities: [{
     browserName: 'chrome',

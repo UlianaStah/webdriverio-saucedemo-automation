@@ -15,6 +15,6 @@ jobs:
 
       - run: npm ci
 
-      - run: npm test
+      - run: npx xvfb-run --auto-servernum npm test
         env:
           CI: true

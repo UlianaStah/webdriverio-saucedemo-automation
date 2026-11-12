@@ -11,7 +11,7 @@ export const config = {
     },
     'goog:chromeOptions': {
         args: process.env.CI
-            ? ['--headless', '--disable-gpu', '--no-sandbox', '--window-size=1920,1080']
+            ? ['--headless', '--disable-gpu', '--disable-dev-shm-usage', '--no-sandbox', '--window-size=1920,1080']
             : []
     }
 }],

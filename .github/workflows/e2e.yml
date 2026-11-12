@@ -15,6 +15,9 @@ jobs:
 
       - run: npm ci
 
+      - name: Setup Xvfb
+        uses: pyTooling/Actions/xvfb@main
+
       - run: npm test
         env:
           CI: true
